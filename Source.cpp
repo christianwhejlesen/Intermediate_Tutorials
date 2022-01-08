@@ -26,6 +26,22 @@ namespace cwh {
 		}
 	}
 
+	void printFixed(const char* s, int length)
+	{
+		int i = 0;
+		while (*s != 0 && i < length)
+		{
+			_putch(*s);
+			s++;
+			i++;
+		}
+		for (; i < length; i++)
+		{
+			_putch(' ');
+		}
+	}
+
+
 	int strlength(const char* s)
 	{
 		int i = 0;
@@ -227,8 +243,8 @@ void printDB(const Entry* db, int len)
 
 	for (int i = 0; i < len; i++)
 	{
-		cwh::print(db[i].name);
-		cwh::print("\t|");
+		cwh::printFixed(db[i].name, 15);
+		cwh::print(" |");
 		printValue(db[i].value);
 		cwh::print("\n");
 	}
