@@ -91,56 +91,77 @@ namespace cwh {
 
 struct Entry
 {
-	char name[20];
-	char value[10];
+	char name[20] = { 0 };
+	char value[10] = { 0 };
 };
 
+bool testFileExists(char* filename);
 bool menu(Entry* db);
 void printValue(const char* s);
 void printDB(const Entry* db, int len);
 int loadDB(Entry* db, char* filename);
+void saveDB(Entry* db, char* filename, int index, bool app);
 
 
 int main()
 {
-	//Entry db[100];
+	Entry db[100];
 
-	//while (menu(db));
-	std::ifstream in("tekst.txt");
-	if (!in.good())
-	{
-		cwh::print("File error..");
-		while (!_kbhit());
-		return -1;
-	}
+	while (menu(db));
 
-
-
-	for (char c = in.get(); in.good(); c=in.get())
-	{
-		_putch(c);
-	}
-
-	std::ofstream out("out.txt", std::ios_base::app);
-	cwh::print("\n\n\n\tType something (ESC to end)\n");
-	for (char c = _getch(); c != 27; c = _getch())
-	{
-		if (c==13)
-		{
-			cwh::print("\n");
-		}
-		_putch(c);
-		out.put(c);
-	}
+	//std::ifstream in("tekst.txt");
+	//if (!in.good())
+	//{
+	//	cwh::print("File error..");
+	//	while (!_kbhit());
+	//	return -1;
+	//}
 
 
+	//for (char c = in.get(); in.good(); c=in.get())
+	//{
+	//	if (c==35)
+	//	{
+	//		cwh::print("\t\t");
+	//	}
+	//	_putch(c);
 
-	while (!_kbhit());
+	//}
+
+	//std::ofstream out("out.txt", std::ios_base::app);
+	//cwh::print("\n\n\n\tType something (ESC to end)\n");
+	//for (char c = _getch(); c != 27; c = _getch())
+	//{
+	//	if (c==13)
+	//	{
+	//		cwh::print("\n");
+	//	}
+	//	_putch(c);
+	//	out.put(c);
+	//}
+
+
+
+	//while (!_kbhit());
+
+
 	return 0;
 }
 
 
-
+bool testFileExists(char* filename)
+{
+	bool app = false;
+	std::ifstream test(filename);
+	if (test)
+	{
+		test.close();
+		cwh::print("\nAppend to file? (Y/N)");
+		char ans = _getch();
+		app = (ans == 'y' || ans == 'Y') ? true : false;
+	}
+	return app;
+}
 
 bool menu(Entry* db)
 {
@@ -159,11 +180,15 @@ bool menu(Entry* db)
 	switch (c)
 	{
 	case 'l':
+		cwh::print("Enter filename: ");
 		cwh::read(filename, 20);
 		index = loadDB(db, filename);
 		return true;
 		break;
 	case 's':
+		cwh::print("Enter filename: ");
+		cwh::read(filename, 20);
+		saveDB(db, filename, index, testFileExists(filename));
 		return true;
 		break;
 	case 'a':
@@ -211,14 +236,91 @@ void printDB(const Entry* db, int len)
 
 int loadDB(Entry* db, char* filename)
 {
+	char filecpy[400] = { 0 };
+	char tempName[20] = { 0 };
+	char tempValue[10] = { 0 };
+	char* buf;
+
 	int index = 0;
+	int innerIndex = 0;
+	int tempNameIndex = 0;
+	int tempValueIndex = 0;
+
 	std::ifstream inFile(filename);
 	if (!inFile)
 	{
 		cwh::print("\n\n\nFile error...");
 	}
+	
+	for (char c = inFile.get(); inFile.good(); c = inFile.get())
+	{
+		filecpy[innerIndex] = c;
+		innerIndex++;
+	}
+	innerIndex++;
 
+	for (int i = 0; i < innerIndex; i++)
+	{
+		if (filecpy[i] > 57)
+		{
+			tempName[tempNameIndex] = filecpy[i];
+			tempNameIndex++;
+		}
+		else if (filecpy[i]>=48 && filecpy[i]<=57)
+		{
+			tempValue[tempValueIndex] = filecpy[i];
+			tempValueIndex++;
+		}
+		else if (filecpy[i]==10 || filecpy[i] == 0)
+		{
+			buf = db[index].name;
+			for (int i = 0; i < tempNameIndex; i++, buf++)
+			{
+				*buf = tempName[i];
+			}
 
+			buf = db[index].value;
+			for (int i = 0; i < tempValueIndex; i++, buf++)
+			{
+				*buf = tempValue[i];
+			}
+
+			index++;
+			tempNameIndex = 0;
+			tempValueIndex = 0;
+		}
+	}
 
 	return index;
+}
+
+void saveDB(Entry* db, char* filename, int index, bool app)
+{
+	char filecpy[400] = { 0 };
+	char tempName[20] = { 0 };
+	char tempValue[10] = { 0 };
+	char* buf;
+
+	int innerIndex = 0;
+	int tempNameIndex = 0;
+	int tempValueIndex = 0;
+
+	if (app)
+	{
+		std::ofstream out(filename, std::ios_base::app);
+	}
+	else
+	{
+		std::ofstream out(filename);
+	}
+
+	for (int i = 0; i < index; i++)
+	{
+		buf = db[i].name;
+		for (char c = *buf; *buf > 57; buf++)
+		{
+			out.put = *buf;
+		}
+	}
+
 }
