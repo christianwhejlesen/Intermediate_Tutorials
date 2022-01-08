@@ -304,23 +304,52 @@ void saveDB(Entry* db, char* filename, int index, bool app)
 	int innerIndex = 0;
 	int tempNameIndex = 0;
 	int tempValueIndex = 0;
+	//std::ofstream out();
 
 	if (app)
 	{
 		std::ofstream out(filename, std::ios_base::app);
+		for (int i = 0; i < index; i++)
+		{
+			buf = db[i].name;
+			for (char c = *buf; *buf != 0; buf++)
+			{
+				out.put(*buf);
+			}
+
+			buf = db[i].value;
+			for (char c = *buf; *buf != 10; buf++)
+			{
+				out.put(*buf);
+			}
+			if (i != index - 1)
+			{
+				out.put(10);
+			}
+		}
 	}
 	else
 	{
 		std::ofstream out(filename);
-	}
-
-	for (int i = 0; i < index; i++)
-	{
-		buf = db[i].name;
-		for (char c = *buf; *buf > 57; buf++)
+		for (int i = 0; i < index; i++)
 		{
-			out.put = *buf;
+			buf = db[i].name;
+			for (char c = *buf; *buf != 0; buf++)
+			{
+				out.put(*buf);
+			}
+
+			buf = db[i].value;
+			for (char c = *buf; *buf != 0; buf++)
+			{
+				out.put(*buf);
+			}
+			if (i != index - 1)
+			{
+				out.put(10);
+			}
 		}
 	}
+
 
 }
