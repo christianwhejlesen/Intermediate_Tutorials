@@ -125,42 +125,6 @@ int main()
 
 	while (menu(db));
 
-	//std::ifstream in("tekst.txt");
-	//if (!in.good())
-	//{
-	//	cwh::print("File error..");
-	//	while (!_kbhit());
-	//	return -1;
-	//}
-
-
-	//for (char c = in.get(); in.good(); c=in.get())
-	//{
-	//	if (c==35)
-	//	{
-	//		cwh::print("\t\t");
-	//	}
-	//	_putch(c);
-
-	//}
-
-	//std::ofstream out("out.txt", std::ios_base::app);
-	//cwh::print("\n\n\n\tType something (ESC to end)\n");
-	//for (char c = _getch(); c != 27; c = _getch())
-	//{
-	//	if (c==13)
-	//	{
-	//		cwh::print("\n");
-	//	}
-	//	_putch(c);
-	//	out.put(c);
-	//}
-
-
-
-	//while (!_kbhit());
-
-
 	return 0;
 }
 
@@ -240,6 +204,8 @@ void printValue(const char* s)
 void printDB(const Entry* db, int len)
 {
 	cwh::print("\n");
+	cwh::print("\t\t   Name - Value Chart.\n");
+	cwh::print("\t\t-------------------------\n\n");
 
 	for (int i = 0; i < len; i++)
 	{
